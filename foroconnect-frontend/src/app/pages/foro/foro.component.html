@@ -1,0 +1,267 @@
+
+<div class="foro-container">
+
+  <!-- ENCABEZADO -->
+  <header class="foro-header">
+    <div>
+      <h1>ForoConnect</h1>
+      <p>Conecta, comparte y participa</p>
+    </div>
+
+    <div class="usuario-info">
+      <span>Hola, {{ nombreUsuario }}</span>
+      <span class="rol">{{ rolUsuario }}</span>
+
+      <a routerLink="/perfil">Mi perfil</a>
+
+      <button
+        type="button"
+        class="btn-salir"
+        (click)="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <main class="foro-main">
+
+    <!-- BIENVENIDA -->
+    <section class="bienvenida">
+      <h2>Bienvenido a ForoConnect</h2>
+
+      <p>
+        Explora temas, comparte tus ideas y participa
+        en nuestra comunidad.
+      </p>
+
+      <button
+        type="button"
+        class="btn-principal"
+        (click)="mostrarFormulario = !mostrarFormulario">
+        {{ mostrarFormulario ? 'Cancelar' : '+ Nueva publicación' }}
+      </button>
+    </section>
+
+    <!-- CREAR PUBLICACIÓN -->
+    <section class="nueva-publicacion" *ngIf="mostrarFormulario">
+      <h3>Crear publicación</h3>
+
+      <form
+        #publicacionForm="ngForm"
+        (ngSubmit)="crearPublicacion()">
+
+        <label for="titulo">Título</label>
+        <input
+          id="titulo"
+          name="titulo"
+          [(ngModel)]="nuevoTitulo"
+          required
+          minlength="5"
+          maxlength="120"
+          placeholder="Escribe el título del tema"
+        />
+
+        <label for="categoria">Categoría</label>
+        <select
+          id="categoria"
+          name="categoria"
+          [(ngModel)]="nuevaCategoria"
+          required>
+          <option
+            *ngFor="let categoria of categorias"
+            [value]="categoria">
+            {{ categoria }}
+          </option>
+        </select>
+
+        <label for="contenido">Contenido</label>
+        <textarea
+          id="contenido"
+          name="contenido"
+          [(ngModel)]="nuevoContenido"
+          required
+          minlength="10"
+          rows="4"
+          placeholder="¿Qué te gustaría compartir?">
+        </textarea>
+
+        <button
+          type="submit"
+          class="btn-principal"
+          [disabled]="publicacionForm.invalid">
+          Publicar tema
+        </button>
+
+      </form>
+    </section>
+
+    <!-- BUSCADOR Y FILTROS CON BOOTSTRAP -->
+    <section class="explorar">
+      <h2>Explorar publicaciones</h2>
+
+      <div class="row g-3">
+
+        <div class="col-12 col-md-7 col-lg-8">
+          <input
+            type="search"
+            name="busqueda"
+            [(ngModel)]="busqueda"
+            class="form-control"
+            placeholder="Buscar publicaciones..."
+            aria-label="Buscar publicaciones"
+          />
+        </div>
+
+        <div class="col-12 col-md-5 col-lg-4">
+          <select
+            name="filtroCategoria"
+            [(ngModel)]="categoriaSeleccionada"
+            class="form-select"
+            aria-label="Filtrar por categoría">
+
+            <option value="Todas">
+              Todas las categorías
+            </option>
+
+            <option
+              *ngFor="let categoria of categorias"
+              [value]="categoria">
+              {{ categoria }}
+            </option>
+
+          </select>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PUBLICACIONES -->
+    <section class="lista-publicaciones">
+
+      <article
+        class="publicacion-card"
+        *ngFor="let publicacion of publicacionesFiltradas">
+
+        <div class="publicacion-encabezado">
+          <span class="categoria">
+            {{ publicacion.categoria }}
+          </span>
+
+          <span class="fecha">
+            {{ publicacion.fecha }}
+          </span>
+        </div>
+
+        <h3>{{ publicacion.titulo }}</h3>
+
+        <p class="contenido">
+          {{ publicacion.contenido }}
+        </p>
+
+        <p class="autor">
+          Publicado por: {{ publicacion.autor }}
+        </p>
+
+        <!-- MODERACIÓN DE PUBLICACIONES -->
+        <p
+          class="estado-baneo"
+          *ngIf="publicacion.baneada">
+          Publicación bloqueada por moderación
+        </p>
+
+        <button
+          type="button"
+          class="btn-moderar"
+          *ngIf="rolUsuario === 'ADMIN'"
+          (click)="cambiarEstadoPublicacion(publicacion)">
+
+          {{ publicacion.baneada
+            ? 'Restaurar publicación'
+            : 'Banear publicación' }}
+
+        </button>
+
+        <!-- COMENTARIOS -->
+        <div
+          class="comentarios"
+          *ngIf="!publicacion.baneada">
+
+          <h4>
+            Comentarios
+            ({{ comentariosVisibles(publicacion).length }})
+          </h4>
+
+          <div
+            class="comentario"
+            *ngFor="let comentario of comentariosVisibles(publicacion)">
+
+            <strong>{{ comentario.autor }}</strong>
+
+            <p *ngIf="!comentario.baneado">
+              {{ comentario.texto }}
+            </p>
+
+            <p
+              class="estado-baneo"
+              *ngIf="comentario.baneado">
+              Comentario bloqueado por moderación.
+            </p>
+
+            <!-- MODERACIÓN SOLO ADMIN -->
+            <button
+              type="button"
+              class="btn-moderar"
+              *ngIf="rolUsuario === 'ADMIN'"
+              (click)="cambiarEstadoComentario(comentario)">
+
+              {{ comentario.baneado
+                ? 'Restaurar comentario'
+                : 'Banear comentario' }}
+
+            </button>
+
+          </div>
+
+          <p
+            *ngIf="comentariosVisibles(publicacion).length === 0">
+            Todavía no hay comentarios.
+          </p>
+
+          <!-- AGREGAR COMENTARIO -->
+          <form
+            #comentarioForm="ngForm"
+            (ngSubmit)="agregarComentario(publicacion)">
+
+            <input
+              type="text"
+              [name]="'comentario-' + publicacion.id"
+              [(ngModel)]="comentariosNuevos[publicacion.id]"
+              placeholder="Escribe un comentario..."
+              required
+              maxlength="500"
+            />
+
+            <button
+              type="submit"
+              class="btn-comentar"
+              [disabled]="comentarioForm.invalid">
+              Comentar
+            </button>
+
+          </form>
+
+        </div>
+
+      </article>
+
+      <!-- SIN RESULTADOS -->
+      <p
+        class="sin-resultados"
+        *ngIf="publicacionesFiltradas.length === 0">
+        No encontramos publicaciones con esos filtros.
+      </p>
+
+    </section>
+
+  </main>
+</div>

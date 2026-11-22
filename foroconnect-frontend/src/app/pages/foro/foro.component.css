@@ -1,0 +1,289 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f3f4ff;
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.foro-header {
+  background: white;
+  padding: 20px max(24px, calc((100% - 1100px) / 2));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.foro-header h1 {
+  color: #4f46e5;
+  margin: 0 0 5px;
+  font-size: 28px;
+}
+
+.foro-header p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 13px;
+}
+
+.usuario-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.usuario-info a {
+  color: #4f46e5;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.rol {
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.foro-main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+.bienvenida,
+.nueva-publicacion,
+.explorar,
+.publicacion-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.bienvenida h2,
+.explorar h2 {
+  margin-top: 0;
+  color: #312e81;
+}
+
+.bienvenida p {
+  color: #6b7280;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-principal {
+  background: #4f46e5;
+  color: white;
+  margin-top: 12px;
+}
+
+.btn-principal:hover {
+  background: #4338ca;
+}
+
+.nueva-publicacion form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input,
+select,
+textarea {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 100%;
+  font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #c7d2fe;
+  border-color: #4f46e5;
+}
+
+.publicacion-encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.categoria {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.fecha,
+.autor {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.publicacion-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.contenido {
+  line-height: 1.6;
+}
+
+.comentarios {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+  margin-top: 20px;
+}
+
+.comentario {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+.comentarios form {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-comentar {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn-moderar {
+  background: #fee2e2;
+  color: #991b1b;
+  margin-top: 10px;
+}
+
+.estado-baneo {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+.sin-resultados {
+  text-align: center;
+  padding: 25px;
+  color: #6b7280;
+}
+
+/* BOTÓN CERRAR SESIÓN */
+.btn-salir {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-salir:hover {
+  background: #fecaca;
+}
+
+/* TABLETS */
+@media (max-width: 768px) {
+  .foro-header {
+    padding: 20px;
+  }
+
+  .foro-main {
+    padding: 20px 15px;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CELULARES */
+@media (max-width: 480px) {
+  .foro-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .foro-header h1 {
+    font-size: 24px;
+  }
+
+  .bienvenida,
+  .nueva-publicacion,
+  .explorar,
+  .publicacion-card {
+    padding: 18px;
+  }
+
+  .comentarios form {
+    flex-direction: column;
+  }
+
+  .btn-comentar,
+  .btn-principal {
+    width: 100%;
+  }
+
+
+/* AJUSTE DE COLUMNAS PARA TABLETS */
+@media (min-width: 768px) and (max-width: 991px) {
+  .explorar .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+
+  .explorar .row > div:first-child {
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
+    min-width: 0;
+  }
+
+  .explorar .row > div:last-child {
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;
+    min-width: 0;
+  }
+
+  .explorar input,
+  .explorar select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+}

@@ -1,0 +1,83 @@
+
+<div class="perfil-container">
+  <div class="perfil-card">
+
+    <h1>ForoConnect</h1>
+    <p>Conecta, comparte y participa</p>
+
+    <h2>Mi perfil</h2>
+    <p class="descripcion">
+      Actualiza tu información personal.
+    </p>
+
+    <div class="rol-info">
+      <strong>Rol:</strong> {{ usuario?.rol }}
+    </div>
+
+    <form [formGroup]="perfilForm"
+          (ngSubmit)="guardarCambios()">
+
+      <div class="form-group">
+        <label for="nombre">Nombre completo</label>
+
+        <input
+          type="text"
+          id="nombre"
+          formControlName="nombre"
+          placeholder="Ingresa tu nombre"
+        />
+
+        <small class="error"
+          *ngIf="perfilForm.get('nombre')?.touched &&
+                 perfilForm.get('nombre')?.hasError('required')">
+          El nombre es obligatorio.
+        </small>
+
+        <small class="error"
+          *ngIf="perfilForm.get('nombre')?.touched &&
+                 perfilForm.get('nombre')?.hasError('minlength')">
+          El nombre debe tener al menos 3 caracteres.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="correo">Correo electrónico</label>
+
+        <input
+          type="email"
+          id="correo"
+          formControlName="correo"
+          placeholder="ejemplo@correo.com"
+        />
+
+        <small class="error"
+          *ngIf="perfilForm.get('correo')?.touched &&
+                 perfilForm.get('correo')?.hasError('required')">
+          El correo electrónico es obligatorio.
+        </small>
+
+        <small class="error"
+          *ngIf="perfilForm.get('correo')?.touched &&
+                 perfilForm.get('correo')?.hasError('email')">
+          Ingresa un correo electrónico válido.
+        </small>
+      </div>
+
+      <button type="submit">
+        Guardar cambios
+      </button>
+
+      <p *ngIf="mensaje"
+         [class.exito]="guardado"
+         [class.error]="!guardado">
+        {{ mensaje }}
+      </p>
+
+    </form>
+
+    <p class="volver-link">
+      <a routerLink="/login">Volver al inicio de sesión</a>
+    </p>
+
+  </div>
+</div>
